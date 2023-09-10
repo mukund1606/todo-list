@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/model/colors.dart';
+
+import '../model/colors.dart';
+import '../model/todo_item.dart';
+import '../widgets/todo_item.dart';
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  Home({Key? key}) : super(key: key);
+
+  final todosList = ToDo.todoList();
 
   @override
   Widget build(BuildContext context) {
@@ -10,9 +15,62 @@ class Home extends StatelessWidget {
         backgroundColor: bgColor,
         appBar: _buildAppBar(),
         body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Column(
-            children: [searchBox()],
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  searchBox(),
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(top: 30, bottom: 20),
+                          child: const Text(
+                            "All Todos",
+                            style: TextStyle(
+                                fontSize: 40, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        for (ToDo todo in todosList)
+                          ToDoItem(
+                            todo: todo,
+                          )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Container(
+                      margin: const EdgeInsets.only(bottom: 20),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 5),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: const [
+                            BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(0.0, 0.0),
+                                blurRadius: 10,
+                                spreadRadius: 0)
+                          ],
+                          borderRadius: BorderRadius.circular(10)),
+                      child: const TextField(
+                        decoration: InputDecoration(
+                          hintText: "Add new Todo Item",
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ))
+                  ],
+                ),
+              )
+            ],
           ),
         ));
   }
